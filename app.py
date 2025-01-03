@@ -5,7 +5,7 @@ import os
 os.makedirs("data", exist_ok=True)
 
 # # Create Game Logs
-# run_random_games_and_save_game_logs(200000, "logs_200k")
+run_random_games_and_save_game_logs(200000, "logs_200k")
 
 
 # Create Dataset
@@ -33,6 +33,6 @@ os.makedirs("data", exist_ok=True)
 
 
 ## Play PvE 
-while True:
-    input("Press Any Key To Start The Game!")
-    start_pve_game()
+# while True:
+#     input("Press Any Key To Start The Game!")
+#     start_pve_game()
