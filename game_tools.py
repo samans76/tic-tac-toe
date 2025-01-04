@@ -3,7 +3,7 @@ import random
 import copy
 import json
 from typing import Tuple
-from ml import load_model, predict_move_from_board
+from ml import load_model, predict_move_from_board_NN,predict_move_from_board_minimax
 
 default_state = [["-","-","-"],
                  ["-","-","-"],
@@ -13,7 +13,7 @@ class Player(Enum):
     O ="O"
     X = "X"
 
-def start_pve_game():
+def start_pve_game_NN():
     state = copy.deepcopy(default_state)
     # player = Player.O if random.random() >0.5 else Player.X
     # environment = Player.O if player == Player.X else Player.X
@@ -30,7 +30,7 @@ def start_pve_game():
         else:
             cell = []
             while(True):
-                cell = predict_move_from_board(model, state)
+                cell = predict_move_from_board_NN(model, state)
                 if is_cell_empty(state,cell): break
             x,y = cell
             state[x][y] = round_owner.name
@@ -42,6 +42,33 @@ def start_pve_game():
     else:
         print(f"Game is a Tie!")
 
+def start_pve_game_minimax():
+    state = copy.deepcopy(default_state)
+    player = Player.O if random.random() >0.5 else Player.X
+    environment = Player.O if player == Player.X else Player.X
+    # player = Player.O
+    # environment = Player.X
+    render_game(state)
+    for round in range(9):
+        round_owner = Player.O if round % 2 == 0 else Player.X
+        if round_owner == player:
+            x,y = get_input(round_owner,state)
+            state[x][y] = round_owner.name
+        else:
+            cell = []
+            while(True):
+                cell = predict_move_from_board_minimax(state,environment)
+                print("cell :",cell)
+                if is_cell_empty(state,cell): break
+            x,y = cell
+            state[x][y] = round_owner.name
+        render_game(state)
+        winner = check_winner(state)
+        if winner !=  None:
+            print(f"Player {winner} has Won! Congratulations!!")
+            break
+    else:
+        print(f"Game is a Tie!")
 
 
 def start_pvp_game():
