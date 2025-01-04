@@ -36,7 +36,7 @@ def start_pve_game_NN():
             state[x][y] = round_owner.name
         render_game(state)
         winner = check_winner(state)
-        if winner !=  None:
+        if winner == "X" or winner == "O":
             print(f"Player {winner} has Won! Congratulations!!")
             break
     else:
@@ -64,7 +64,7 @@ def start_pve_game_minimax():
             state[x][y] = round_owner.name
         render_game(state)
         winner = check_winner(state)
-        if winner !=  None:
+        if winner == "X" or winner == "O":
             print(f"Player {winner} has Won! Congratulations!!")
             break
     else:
@@ -80,7 +80,7 @@ def start_pvp_game():
         state[x][y] = round_owner.name
         render_game(state)
         winner = check_winner(state)
-        if winner !=  None:
+        if winner == "X" or winner == "O":
             print(f"Player {winner} has Won! Congratulations!!")
             break
     else:
@@ -99,6 +99,8 @@ def check_winner(state):
         winner = state[0][0]
     if state[0][2] == state[1][1] == state[2][0] and state[0][2] != "-":
         winner = state[0][2]
+    if winner == None and not "-" in state:
+        winner = 0
     return winner
 
     
@@ -160,14 +162,14 @@ def run_virtual_game():
     game_data = {"winner": None, "rounds": [], "moves": []}
     winner = None
     state = copy.deepcopy(default_state)
-    game_data["rounds"].append(copy.deepcopy(default_state))
+    game_data["rounds"].append(state)
     for round in range(9):
         player = Player.O if round % 2 == 0 else Player.X
         cell = choose_cell(state,player)
         game_data["rounds"].append(copy.deepcopy(state))
         game_data["moves"].append((cell[0]+1, cell[1]+1))
         winner = check_winner(state)
-        if winner !=  None: break
+        if winner == "X" or winner == "O": break
 
     game_data["winner"] = winner
     return game_data
@@ -184,3 +186,33 @@ def run_random_games_and_save_game_logs(count=10000, log_file_name = "game_logs"
 
 # gets board gives next move
 # def minmax_decision(state)-> list[int]:
+
+def run_minimax_game(player:Player):
+    game_data = {"winner": None, "rounds": [], "moves": []}
+    state = copy.deepcopy(default_state)
+    game_data["rounds"].append(state)
+    for round in range(9):
+        round_owner = Player.O if round % 2 == 0 else Player.X
+        if round_owner == player.name:
+            x,y = predict_move_from_board_minimax(state,player)
+            state[x][y] = player
+        else:
+            x,y = choose_cell(state, round_owner)
+            state[x][y] = player
+        game_data["rounds"].append(copy.deepcopy(state))
+        game_data["moves"].append((x+1, y+1))
+        winner = check_winner(state)
+        if winner != None:
+            game_data["winner"] = winner
+            break
+    return game_data
+
+def run_and_log_minimax_games(log_file_name:str, player:Player,count=1000):
+    game_data_list = []
+    for i in range(count):
+        game_data = run_minimax_game(player)
+        game_data_list.append(game_data)
+
+    with open(f"data/minimax_{player.name}_{log_file_name}.json", "w") as file:
+        json.dump(game_data_list, file)
+    print("Games Log Saving Ended !!!")

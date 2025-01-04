@@ -35,8 +35,10 @@ os.makedirs("data", exist_ok=True)
 
 
 ## Play PvE 
-while True:
-    input("Press Any Key To Start The Game!")
-    start_pve_game_minimax()
+# while True:
+#     input("Press Any Key To Start The Game!")
+#     start_pve_game_minimax()
     # start_pve_game_NN()
 
+
+## Random against minimax player X (to train X model)
