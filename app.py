@@ -5,7 +5,7 @@ import os
 os.makedirs("data", exist_ok=True)
 
 # # Create Game Logs
-run_random_games_and_save_game_logs(200000, "logs_200k")
+run_random_games_and_save_game_logs(5000000, "logs_5m")
 
 
 # Create Dataset
