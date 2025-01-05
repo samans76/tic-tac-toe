@@ -37,9 +37,14 @@ os.makedirs("data", exist_ok=True)
 #     start_pvp_game()
 
 
-## Play PvE 
-while True:
-    input("Press Any Key To Start The Game!")
-    start_pve_game_NN()
+## Play PvE with minimax
+# while True:
+#     input("Press Any Key To Start The Game!")
     # start_pve_game_minimax()
+
+
+## Play PvE with Neural Network
+# while True:
+#     input("Press Any Key To Start The Game!")
+#     start_pve_game_NN()
     
