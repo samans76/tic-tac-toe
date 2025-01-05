@@ -1,4 +1,4 @@
-from game_tools import start_pvp_game,start_pve_game_minimax,start_pve_game_NN, run_random_games_and_save_game_logs, Player
+from game_tools import start_pvp_game,start_pve_game_minimax,start_pve_game_NN, run_random_games_and_save_game_logs, run_and_log_minimax_games, Player
 from ml import create_dataset_from_game_logs, train_model, load_model, predict_move_from_board_NN,continue_model_train
 
 import os
@@ -6,6 +6,9 @@ os.makedirs("data", exist_ok=True)
 
 # # Create Game Logs
 # run_random_games_and_save_game_logs(500000, "logs_500k_6")
+
+## Save minimax vs random game logs
+run_and_log_minimax_games("logs_0.9k", Player.X, 900)
 
 
 # Create Dataset
@@ -36,9 +39,7 @@ os.makedirs("data", exist_ok=True)
 
 ## Play PvE 
 # while True:
-#     input("Press Any Key To Start The Game!")
-#     start_pve_game_minimax()
+    # input("Press Any Key To Start The Game!")
     # start_pve_game_NN()
-
-
-## Random against minimax player X (to train X model)
+    # start_pve_game_minimax()
+    

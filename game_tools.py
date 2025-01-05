@@ -1,4 +1,5 @@
 from enum import Enum
+import numpy as np
 import random
 import copy
 import json
@@ -44,10 +45,10 @@ def start_pve_game_NN():
 
 def start_pve_game_minimax():
     state = copy.deepcopy(default_state)
-    player = Player.O if random.random() >0.5 else Player.X
-    environment = Player.O if player == Player.X else Player.X
-    # player = Player.O
-    # environment = Player.X
+    # player = Player.O if random.random() >0.5 else Player.X
+    # environment = Player.O if player == Player.X else Player.X
+    player = Player.X
+    environment = Player.O
     render_game(state)
     for round in range(9):
         round_owner = Player.O if round % 2 == 0 else Player.X
@@ -99,8 +100,10 @@ def check_winner(state):
         winner = state[0][0]
     if state[0][2] == state[1][1] == state[2][0] and state[0][2] != "-":
         winner = state[0][2]
-    if winner == None and not "-" in state:
-        winner = 0
+    if winner == None:
+        state = np.array(state).reshape(-1)
+        if not "-" in state:
+            winner = 0
     return winner
 
     
@@ -184,21 +187,18 @@ def run_random_games_and_save_game_logs(count=10000, log_file_name = "game_logs"
         json.dump(game_data_list, file)
     print("Games Log Saving Ended !!!")
 
-# gets board gives next move
-# def minmax_decision(state)-> list[int]:
-
 def run_minimax_game(player:Player):
     game_data = {"winner": None, "rounds": [], "moves": []}
     state = copy.deepcopy(default_state)
-    game_data["rounds"].append(state)
+    game_data["rounds"].append(default_state)
     for round in range(9):
         round_owner = Player.O if round % 2 == 0 else Player.X
-        if round_owner == player.name:
+        if round_owner.name == player.name:
             x,y = predict_move_from_board_minimax(state,player)
-            state[x][y] = player
+            state[x][y] = player.name
         else:
             x,y = choose_cell(state, round_owner)
-            state[x][y] = player
+            state[x][y] = round_owner.name
         game_data["rounds"].append(copy.deepcopy(state))
         game_data["moves"].append((x+1, y+1))
         winner = check_winner(state)
@@ -210,6 +210,7 @@ def run_minimax_game(player:Player):
 def run_and_log_minimax_games(log_file_name:str, player:Player,count=1000):
     game_data_list = []
     for i in range(count):
+        if i%10 == 0: print(i)
         game_data = run_minimax_game(player)
         game_data_list.append(game_data)
 
