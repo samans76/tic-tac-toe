@@ -32,10 +32,11 @@ class Dataset:
 def create_dataset_from_game_logs(logs_file_name:str, player:Player):
    with open(f"data/{logs_file_name}.json", 'r') as file: 
       game_logs = json.load(file)
-   won_game_logs = [log for log in game_logs if log["winner"] == player.name]
+   # won_game_logs = [log for log in game_logs if log["winner"] == player.name]
+   not_lost_game_logs = [log for log in game_logs if log["winner"] == player.name or log["winner"] == 0]
    start_round = 0 if player == Player.O else 1
    scenarios = []
-   for game_log in won_game_logs:
+   for game_log in not_lost_game_logs:
       rounds_count_without_result_round = len(game_log["rounds"]) -1
       for round_idx in range(start_round, rounds_count_without_result_round, 2):
          board = normalize_board(game_log["rounds"][round_idx])
@@ -84,7 +85,7 @@ def continue_model_train(model_file_name:str,dataset_file_name ):
    test_moves = np.array([scenario["cells_chance"] for scenario in test_scenarios]) 
    # model = load_model(model_file_name)
    model = models.load_model(f'data/{model_file_name}.keras')
-   model.fit(train_boards, train_moves, epochs=10, batch_size=64, validation_split=0.2)
+   model.fit(train_boards, train_moves, epochs=10, batch_size=1, validation_split=0.2)
    test_accuracy = model.evaluate(test_boards, test_moves)
    print(f"Test accuracy: {test_accuracy}")
    model.save(f"data/{dataset_file_name}_model.keras")
@@ -110,7 +111,7 @@ def train_model(dataset_file_name):
       layers.Dense(9, activation='softmax')                      # Output layer (9 classes)
    ])
    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-   model.fit(train_boards, train_moves, epochs=10, batch_size=64, validation_split=0.2)
+   model.fit(train_boards, train_moves, epochs=10, batch_size=1, validation_split=0.2)
    # model = models.Sequential([
    #    layers.Reshape((3, 3, 1), input_shape=(9,)),  # Reshape input to 3x3 grid
    #    layers.Conv2D(32, (3, 3), activation='relu', padding='same'),  # 2D Convolution to capture spatial patterns

@@ -8,17 +8,17 @@ os.makedirs("data", exist_ok=True)
 # run_random_games_and_save_game_logs(500000, "logs_500k_6")
 
 ## Save minimax vs random game logs
-run_and_log_minimax_games("logs_0.9k", Player.X, 900)
+# run_and_log_minimax_games("logs_1.2k", Player.X, 1200)
 
 
 # Create Dataset
-# create_dataset_from_game_logs("logs_500k_6", Player.X)
+# create_dataset_from_game_logs("minimax_X_logs_0.5k", Player.X)
 
 ## Train Model
-# train_model("logs_500k_1_dataset_player_X")
+# train_model("minimax_X_logs_0.5k_dataset_player_X")
 
 # Continue Model Train
-# continue_model_train("logs_500k_1_dataset_player_X_model","logs_500k_2_dataset_player_X")
+# continue_model_train("minimax_X_logs_1.1k_dataset_player_X_model","minimax_X_logs_1.2k_dataset_player_X")
 
 
 ## Predict
@@ -38,8 +38,8 @@ run_and_log_minimax_games("logs_0.9k", Player.X, 900)
 
 
 ## Play PvE 
-# while True:
-    # input("Press Any Key To Start The Game!")
-    # start_pve_game_NN()
+while True:
+    input("Press Any Key To Start The Game!")
+    start_pve_game_NN()
     # start_pve_game_minimax()
     

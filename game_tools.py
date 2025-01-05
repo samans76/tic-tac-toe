@@ -29,10 +29,10 @@ def start_pve_game_NN():
             x,y = get_input(round_owner,state)
             state[x][y] = round_owner.name
         else:
-            cell = []
-            while(True):
-                cell = predict_move_from_board_NN(model, state)
-                if is_cell_empty(state,cell): break
+            cell = predict_move_from_board_NN(model, state)
+            if not is_cell_empty(state,cell):
+                cell = choose_cell(state, round_owner)
+                print("random choose! poor data")
             x,y = cell
             state[x][y] = round_owner.name
         render_game(state)
