@@ -4,6 +4,7 @@ Run the following command in project directory
 ```bash
 $ python app.py
 ```
+<br>
 
 ---
 ### Train a model for Neural Network AI :
