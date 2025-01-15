@@ -1,6 +1,8 @@
 from enum import Enum
 import numpy as np
 import random
+import string
+import time
 import copy
 import json
 from typing import List
@@ -216,15 +218,16 @@ def find_random_empty_cell(state):
     return random.choice(empty_positions)
 
 # minimax
-def run_and_log_minimax_games(log_file_name:str, minimax_player:Player, count=1000):
+def run_and_log_minimax_games(log_file_name:str, minimax_player:Player, count=1000, file_limit= 100):
     game_data_list = []
-    for i in range(count):
-        if i%10 == 0: print(i)
+    for i in range(1,count):
         game_data = run_minimax_vs_random_game(minimax_player)
         game_data_list.append(game_data)
-
-    with open(f"data/minimax_{minimax_player.value}_{log_file_name}.json", "w") as file:
-        json.dump(game_data_list, file)
+        if i%100 == 0: print(i)
+        if i%file_limit == 0:
+            with open(f"/mnt/d/wsl-data/minimax_{minimax_player.value}_{log_file_name}_{i/file_limit}.json", "w") as file:
+                json.dump(game_data_list, file)
+            game_data_list = []
     print("Games Log Saving Ended !!!")
 
 
